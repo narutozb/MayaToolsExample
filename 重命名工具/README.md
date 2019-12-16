@@ -10,3 +10,8 @@
 对场景内类型为nurbsCurve 和 nurbsSurface的物体添加后缀
 
 后缀分别为    _NCV 和 _NSF
+
+##
+renaming_scene.ma 为场景文件
+
+addsuffix.py 为工具演示文件
