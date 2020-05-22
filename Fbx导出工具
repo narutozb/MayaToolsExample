@@ -1,19 +1,28 @@
+# 导入maya.cmds模块
 import maya.cmds as cmds
 
-# 导出所选色的模型为fbx
-def export_fbx(obj_name, export_folder):
-	cmds.select(obj_name, r=True)
-	path = export_folder + obj_name +".fbx"
-	cmds.file(path, force=True, options="v=0", typ="FBX export", pr=True, es=True)
-
-# 获取当前场景文件路径，并且设定输出文件夹路径。
-scene_path = cmds.file(q=True, sceneName=True)
-folder_path = "/".join(source_path.split(u"/")[:-1]) + "/" + "parts/"
-
-# 获取当前选择列表
-selected_models = cmds.ls(sl=True)
+# 获取所选物体列表。
+name_list = cmds.ls(sl=True)
 
 
-# 导出各个所选模型到当前文件夹内的parts 中.
-for perobj in selected_models:
-    export_fbx(perobj, folder_path)
+# 遍历每一个在所选物体列表中的物体。
+for name in name_list:
+
+    obj_name = name
+    
+    # 获得当前文件完整路径
+    hehaiqi_path = cmds.file(sn=True, q=True)
+    # C:/Users/qm/Documents/maya/projects/default/scenes/hehaiqi_obj.mb
+    
+    # 分割当前文件名称。
+    hehaiqi_folder_split = hehaiqi_path.split("/")[0:-1]
+    # [u'C:', u'Users', u'qm', u'Documents', u'maya', u'projects', u'default', u'scenes'] # 
+    
+    # 整合分割后的列表。添加所选物体名称作为fbx的文件名称。
+    str="/"
+    folder_path = str.join(hehaiqi_folder_split)+"/parts/" + obj_name + ".fbx"
+    # C:/Users/qm/Documents/maya/projects/default/scenes/parts/pSphere1.fbx # 
+    
+    # 导出所选择的物体，为同名fbx文件。
+    cmds.select(obj_name, r=True)
+    cmds.file(folder_path, force=True, options="v=0;", typ="FBX export", pr=True, es=True)
