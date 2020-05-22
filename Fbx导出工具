@@ -1,0 +1,19 @@
+import maya.cmds as cmds
+
+# 导出所选色的模型为fbx
+def export_fbx(obj_name, export_folder):
+	cmds.select(obj_name, r=True)
+	path = export_folder + obj_name +".fbx"
+	cmds.file(path, force=True, options="v=0", typ="FBX export", pr=True, es=True)
+
+# 获取当前场景文件路径，并且设定输出文件夹路径。
+scene_path = cmds.file(q=True, sceneName=True)
+folder_path = "/".join(source_path.split(u"/")[:-1]) + "/" + "parts/"
+
+# 获取当前选择列表
+selected_models = cmds.ls(sl=True)
+
+
+# 导出各个所选模型到当前文件夹内的parts 中.
+for perobj in selected_models:
+    export_fbx(perobj, folder_path)
