@@ -1,45 +1,51 @@
-# 导入maya.cmds模块
+import string
 import maya.cmds as cmds
 
-# 获取默认工程路径
-default_folder = os.getenv("HOME") + r"\maya\projects\default\scenes"
+correct_list = list(string.printable[:62]+"_")
 
-# 获取当前文件完整路径
-hehaiqi_path=cmds.file(sn=True, q=True)
-if len(hehaiqi_path) == 0:
-    # hehaiqi_path = default_folder
-    cmds.confirmDialog( title='Confirm', message='请保存文件后再次导出！', button=['确认'], defaultButton='确认' )
+hehaiqi_path=cmds.file(sn=True,q=True)
+
+if len(hehaiqi_path)==0:
+    
+    # 提醒保存文件名
+    cmds.confirmDialog(title=u'confirm',message='ファイルを保存してください',button=['はい'],defaultButton='はい')
+    
 else:
-    # 获取所选物体列表
+    
     name_list=cmds.ls(sl=True)
     
-    # 遍历所选列表中的物体
     for name in name_list:
-        # 定义物体名称
-        obj_name=name
-    
-        # 分割当前文件名称
+        
+        obj_name = name
+        new_obj_name = name
+        
+        # 替换不合法字母
+        for per_chr in new_obj_name:
+            
+            # lower可以把字母大写换成小写
+            if per_chr.lower() not in correct_list:
+                new_obj_name = new_obj_name.replace(per_chr, "_")
+        
+        # 分割整合文件，去掉文件名
         hehaiqi_folder_split=hehaiqi_path.split("/")[0:-1]
-        hehaiqi_file_name=cmds.file(sn=True, shn=True, q=True)[:-3]
-        # 定义文件名及整合文件
+        
+        # 获取文件名
+        hehaiqi_file_name=cmds.file(sn=True,shn=True,q=True)[0:-3]
+        
         str="/"
+        
         folder_path=str.join(hehaiqi_folder_split)+str+hehaiqi_file_name+"_parts"
         
-        # 定义文件路径
-        path_file=obj_name + ".fbx"
-         
-        # 检查是否存在此文件
+        path_file=new_obj_name + ".fbx"
+        
         if not os.path.exists(folder_path):
-            
-            #建立文件夹
             os.makedirs(folder_path)
         
-        #文件和文件路径中间加入/
         full_path=folder_path+"/"+path_file
         
-        # 导出选择的物体，为fbx文件
         cmds.select(obj_name,r=True)
         cmds.file(full_path,force=True,options="v=0;",typ="FBX export",pr=True,es=True)
-    
-    # 弹出保存的文件夹
-    os.startfile(folder_path)
+        
+os.startfile(folder_path)       
+
+
