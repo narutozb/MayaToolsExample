@@ -1,28 +1,45 @@
 # 导入maya.cmds模块
 import maya.cmds as cmds
 
-# 获取所选物体列表。
-name_list = cmds.ls(sl=True)
+# 获取默认工程路径
+default_folder = os.getenv("HOME") + r"\maya\projects\default\scenes"
 
-
-# 遍历每一个在所选物体列表中的物体。
-for name in name_list:
-
-    obj_name = name
+# 获取当前文件完整路径
+hehaiqi_path=cmds.file(sn=True, q=True)
+if len(hehaiqi_path) == 0:
+    # hehaiqi_path = default_folder
+    cmds.confirmDialog( title='Confirm', message='请保存文件后再次导出！', button=['确认'], defaultButton='确认' )
+else:
+    # 获取所选物体列表
+    name_list=cmds.ls(sl=True)
     
-    # 获得当前文件完整路径
-    hehaiqi_path = cmds.file(sn=True, q=True)
-    # C:/Users/qm/Documents/maya/projects/default/scenes/hehaiqi_obj.mb
+    # 遍历所选列表中的物体
+    for name in name_list:
+        # 定义物体名称
+        obj_name=name
     
-    # 分割当前文件名称。
-    hehaiqi_folder_split = hehaiqi_path.split("/")[0:-1]
-    # [u'C:', u'Users', u'qm', u'Documents', u'maya', u'projects', u'default', u'scenes'] # 
+        # 分割当前文件名称
+        hehaiqi_folder_split=hehaiqi_path.split("/")[0:-1]
+        hehaiqi_file_name=cmds.file(sn=True, shn=True, q=True)[:-3]
+        # 定义文件名及整合文件
+        str="/"
+        folder_path=str.join(hehaiqi_folder_split)+str+hehaiqi_file_name+"_parts"
+        
+        # 定义文件路径
+        path_file=obj_name + ".fbx"
+         
+        # 检查是否存在此文件
+        if not os.path.exists(folder_path):
+            
+            #建立文件夹
+            os.makedirs(folder_path)
+        
+        #文件和文件路径中间加入/
+        full_path=folder_path+"/"+path_file
+        
+        # 导出选择的物体，为fbx文件
+        cmds.select(obj_name,r=True)
+        cmds.file(full_path,force=True,options="v=0;",typ="FBX export",pr=True,es=True)
     
-    # 整合分割后的列表。添加所选物体名称作为fbx的文件名称。
-    str="/"
-    folder_path = str.join(hehaiqi_folder_split)+"/parts/" + obj_name + ".fbx"
-    # C:/Users/qm/Documents/maya/projects/default/scenes/parts/pSphere1.fbx # 
-    
-    # 导出所选择的物体，为同名fbx文件。
-    cmds.select(obj_name, r=True)
-    cmds.file(folder_path, force=True, options="v=0;", typ="FBX export", pr=True, es=True)
+    # 弹出保存的文件夹
+    os.startfile(folder_path)
