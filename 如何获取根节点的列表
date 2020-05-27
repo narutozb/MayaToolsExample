@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+import maya.cmds as cmds
+
+# 获取根节点列表方法1
+cmds.select("|*")
+root_list = cmds.ls(sl=True)
+
+# 获取根节点列表方法2
+test_list = cmds.ls(long=True,type="transform")
+
+root_list = []
+
+for per_obj_name in test_list:
+    
+    num = 0
+    for per_chr in per_obj_name:
+        if per_chr == "|":
+            num = num + 1
+    if num > 1:
+        print(per_obj_name + u"不是根节点")
+    else:
+        print(per_obj_name + u"是根节点")
+        root_list.append(per_obj_name)
