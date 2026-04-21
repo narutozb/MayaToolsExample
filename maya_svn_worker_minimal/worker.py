@@ -2,7 +2,15 @@
 from __future__ import annotations
 
 import json
+import os
+import sys
 import traceback
+
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(CURRENT_DIR)
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
 
 from maya_svn_worker_minimal.backend_demo import DemoSvnBackend
 
@@ -36,7 +44,12 @@ def main() -> int:
     dispatcher = WorkerDispatcher()
 
     while True:
-        line = input()
+        try:
+            line = input()
+        except EOFError:
+            break
+
+        line = line.strip()
         if not line:
             continue
 
@@ -48,8 +61,6 @@ def main() -> int:
             params = payload.get("params", {})
             result = dispatcher.dispatch(method, params)
             resp = _make_response(req_id=req_id, ok=True, result=result)
-        except EOFError:
-            break
         except Exception as exc:
             resp = _make_response(
                 req_id=req_id,
