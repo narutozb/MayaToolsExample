@@ -73,6 +73,9 @@ class SvnWorkerBridge:
         self.ensure_started()
         assert self.proc is not None and self.proc.stdin is not None
 
+        if self.proc.poll() is not None:
+            raise RuntimeError(self._build_worker_crash_message())
+
         req_id = next(self._req_id_gen)
         payload = {
             "id": req_id,
@@ -103,6 +106,9 @@ class SvnWorkerBridge:
 
         start = time.time()
         while True:
+            if self.proc is not None and self.proc.poll() is not None:
+                raise RuntimeError(self._build_worker_crash_message())
+
             try:
                 kind, resp = result_queue.get(timeout=0.05)
                 if kind == "ok":
@@ -138,3 +144,26 @@ class SvnWorkerBridge:
             callback = callbacks.get("on_done") if resp.get("ok") else callbacks.get("on_error")
             if callback:
                 callback(resp)
+
+    def _build_worker_crash_message(self) -> str:
+        if self.proc is None:
+            return "SVN worker process is not running"
+
+        details = []
+        returncode = self.proc.poll()
+        if returncode is not None:
+            details.append("returncode={}".format(returncode))
+
+        stderr_text = ""
+        if self.proc.stderr is not None:
+            try:
+                stderr_text = self.proc.stderr.read().strip()
+            except Exception:
+                stderr_text = ""
+
+        if stderr_text:
+            details.append(stderr_text)
+
+        if not details:
+            return "SVN worker process exited unexpectedly"
+        return "SVN worker process exited unexpectedly: {}".format(" | ".join(details))
