@@ -16,15 +16,15 @@
 
 1. Maya 启动后，仅启动一次常驻 Worker 进程
 2. Maya 通过 JSON 行协议把请求发送给 Worker
-3. Worker 在独立 Python 进程中执行 SVN
-4. 执行结果再返回给 Maya
+3. Worker 在独立 Python 进程中调用 `pysvnlite.SVNRepo`
+4. 执行结果再以结构化 JSON 的形式返回给 Maya
 
-这样可以显著降低 Maya 环境下外部命令启动的额外开销。
+这样既可以显著降低 Maya 环境下外部命令启动的额外开销，也可以直接复用你已经封装好的 `pysvnlite` 后端。
 
 ## 最小文件说明
 
-- `maya_svn_worker_minimal/backend_demo.py`
-  - 最小 demo 后端，直接调用 `svn` 命令行
+- `maya_svn_worker_minimal/backend_pysvnlite.py`
+  - 基于 `pysvnlite.SVNRepo` 的 Worker 后端
 - `maya_svn_worker_minimal/worker.py`
   - 常驻 Worker 进程
 - `maya_svn_worker_minimal/bridge.py`
@@ -42,6 +42,6 @@
 
 ## 备注
 
-当前提交的是一个最小可运行版本。
+当前提交的是一个最小可运行版本，并且默认后端已经切换为 `pysvnlite`。
 
-如果你已经有自己的 SVN Python 包，建议只替换 `worker.py` 内部实际调用的后端类，保留 Bridge 与 Worker 的通信结构不变。
+如果后续你还想扩展 `checkout / update / commit / cleanup` 等接口，建议继续保持 Bridge 与 Worker 的通信结构不变，仅在 Worker 内追加对应的后端分发逻辑即可。
