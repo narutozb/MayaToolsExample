@@ -19,14 +19,27 @@ def demo_ping() -> None:
 
 def demo_info(path: str) -> None:
     result = bridge.call_sync("info", {"path": path})
-    print(result["raw"])
+    print(result["data"])
 
 
-def demo_status(path: str) -> None:
-    result = bridge.call_sync("status", {"path": path})
-    print(result["raw"])
+def demo_status(
+    path: str,
+    depth: str | None = None,
+    show_updates: bool = False,
+    ignore_externals: bool = False,
+) -> None:
+    result = bridge.call_sync(
+        "status",
+        {
+            "path": path,
+            "depth": depth,
+            "show_updates": show_updates,
+            "ignore_externals": ignore_externals,
+        },
+    )
+    print(result["data"])
 
 
 def demo_log(path: str, limit: int = 10) -> None:
     result = bridge.call_sync("log", {"path": path, "limit": limit})
-    print(result["raw"])
+    print(result["data"])
