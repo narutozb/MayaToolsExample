@@ -12,12 +12,12 @@ REPO_ROOT = os.path.dirname(CURRENT_DIR)
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from maya_svn_worker_minimal.backend_demo import DemoSvnBackend
+from maya_svn_worker_minimal.backend_pysvnlite import PySvnLiteBackend
 
 
 class WorkerDispatcher:
     def __init__(self) -> None:
-        self.backend = DemoSvnBackend()
+        self.backend = PySvnLiteBackend()
 
     def dispatch(self, method: str, params: dict):
         if method == "ping":
