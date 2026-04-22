@@ -33,15 +33,20 @@ class SvnWorkerBridge:
         if os.name == "nt":
             creationflags = subprocess.CREATE_NO_WINDOW
 
+        env = os.environ.copy()
+        env.setdefault("PYTHONUTF8", "1")
+
         self.proc = subprocess.Popen(
-            [self.python_exe, self.worker_script],
+            [self.python_exe, "-X", "utf8", self.worker_script],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
             encoding="utf-8",
+            errors="replace",
             bufsize=1,
             creationflags=creationflags,
+            env=env,
         )
 
         self._reader_thread = threading.Thread(
@@ -89,7 +94,7 @@ class SvnWorkerBridge:
                 "on_error": on_error,
             }
 
-        self.proc.stdin.write(json.dumps(payload, ensure_ascii=False) + "\n")
+        self.proc.stdin.write(json.dumps(payload) + "\n")
         self.proc.stdin.flush()
         return req_id
 
