@@ -72,7 +72,7 @@ def main() -> int:
                 },
             )
 
-        print(json.dumps(resp, ensure_ascii=False), flush=True)
+        print(json.dumps(resp), flush=True)
 
     return 0
 
