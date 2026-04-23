@@ -1,4 +1,4 @@
-#include "hello_command.h"
+#include "plugin_features.h"
 
 #include <maya/MFnPlugin.h>
 #include <maya/MGlobal.h>
@@ -6,17 +6,15 @@
 
 namespace {
 constexpr const char* PLUGIN_VENDOR = "narutozb";
-constexpr const char* PLUGIN_VERSION = "0.1.0";
-constexpr const char* HELLO_COMMAND_NAME = "helloCmd";
+constexpr const char* PLUGIN_VERSION = "0.2.0";
 }
 
 MStatus initializePlugin(MObject obj)
 {
     MFnPlugin plugin(obj, PLUGIN_VENDOR, PLUGIN_VERSION, "Any");
 
-    MStatus status = plugin.registerCommand(HELLO_COMMAND_NAME, HelloCommand::creator);
+    MStatus status = registerPluginFeatures(plugin);
     if (!status) {
-        status.perror("Failed to register helloCmd");
         return status;
     }
 
@@ -28,9 +26,8 @@ MStatus uninitializePlugin(MObject obj)
 {
     MFnPlugin plugin(obj);
 
-    MStatus status = plugin.deregisterCommand(HELLO_COMMAND_NAME);
+    MStatus status = unregisterPluginFeatures(plugin);
     if (!status) {
-        status.perror("Failed to deregister helloCmd");
         return status;
     }
 
