@@ -2,8 +2,18 @@
   "version": 3,
   "configurePresets": [
     {
-      "name": "vs2022-maya2026-debug",
-      "displayName": "VS2022 Maya2026 Debug",
+      "name": "vs2022-maya2024",
+      "displayName": "VS2022 Maya2024",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build/vs2022_maya2024",
+      "cacheVariables": {
+        "MAYA_VERSION": "2024"
+      }
+    },
+    {
+      "name": "vs2022-maya2026",
+      "displayName": "VS2022 Maya2026",
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
       "binaryDir": "${sourceDir}/build/vs2022_maya2026",
@@ -14,13 +24,23 @@
   ],
   "buildPresets": [
     {
-      "name": "build-debug",
-      "configurePreset": "vs2022-maya2026-debug",
+      "name": "build-maya2024-debug",
+      "configurePreset": "vs2022-maya2024",
       "configuration": "Debug"
     },
     {
-      "name": "build-release",
-      "configurePreset": "vs2022-maya2026-debug",
+      "name": "build-maya2024-release",
+      "configurePreset": "vs2022-maya2024",
+      "configuration": "Release"
+    },
+    {
+      "name": "build-maya2026-debug",
+      "configurePreset": "vs2022-maya2026",
+      "configuration": "Debug"
+    },
+    {
+      "name": "build-maya2026-release",
+      "configurePreset": "vs2022-maya2026",
       "configuration": "Release"
     }
   ]
