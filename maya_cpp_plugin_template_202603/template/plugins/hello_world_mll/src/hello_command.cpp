@@ -1,6 +1,6 @@
 #include "hello_command.h"
 
-#include <maya/MGlobal.h>
+#include "maya_shared_log.h"
 
 void* HelloCommand::creator()
 {
@@ -9,6 +9,6 @@ void* HelloCommand::creator()
 
 MStatus HelloCommand::doIt(const MArgList&)
 {
-    MGlobal::displayInfo("hello_world_mll: Hello from Maya 2026.3 C++ plugin template.");
+    logInfo("hello_world_mll: Hello from Maya C++ plugin template.");
     return MS::kSuccess;
 }
