@@ -41,3 +41,19 @@ function(configure_maya_mll TARGET_NAME)
             LIBRARY_OUTPUT_DIRECTORY "${MAYA_OUTPUT_ROOT}/$<CONFIG>"
     )
 endfunction()
+
+function(apply_default_source_groups TARGET_NAME)
+    foreach(_file IN LISTS ARGN)
+        get_filename_component(_absolute_path "${_file}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+        file(RELATIVE_PATH _relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_absolute_path}")
+        get_filename_component(_relative_dir "${_relative_path}" DIRECTORY)
+
+        if(_relative_dir STREQUAL "")
+            set(_group_name "Root")
+        else()
+            string(REPLACE "/" "\\" _group_name "${_relative_dir}")
+        endif()
+
+        source_group("${_group_name}" FILES "${_absolute_path}")
+    endforeach()
+endfunction()
