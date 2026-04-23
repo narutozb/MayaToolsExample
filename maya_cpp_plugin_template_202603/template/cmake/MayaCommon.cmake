@@ -1,12 +1,12 @@
 function(configure_maya_mll TARGET_NAME)
     target_include_directories(${TARGET_NAME}
         PRIVATE
-            "${MAYA_LOCATION}/include"
+            "${MAYA_INCLUDE_DIR}"
     )
 
     target_link_directories(${TARGET_NAME}
         PRIVATE
-            "${MAYA_LOCATION}/lib"
+            "${MAYA_LIBRARY_DIR}"
     )
 
     target_link_libraries(${TARGET_NAME}
