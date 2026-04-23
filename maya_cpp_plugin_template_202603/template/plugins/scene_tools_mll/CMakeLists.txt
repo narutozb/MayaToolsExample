@@ -1,6 +1,6 @@
 set(TARGET_NAME scene_tools_mll)
 
-add_library(${TARGET_NAME} MODULE
+set(TARGET_SOURCES
     src/plugin_main.cpp
     src/plugin_features.cpp
     src/maya_version_command.cpp
@@ -12,10 +12,13 @@ add_library(${TARGET_NAME} MODULE
     include/clamp_value_node.h
 )
 
+add_library(${TARGET_NAME} MODULE ${TARGET_SOURCES})
+
 target_include_directories(${TARGET_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${SHARED_INCLUDE_DIR}
 )
 
+apply_default_source_groups(${TARGET_NAME} ${TARGET_SOURCES})
 configure_maya_mll(${TARGET_NAME})
