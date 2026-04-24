@@ -1,3 +1,4 @@
+# TODO(project-manager): 如果未来要引入 shared 静态库或测试目标，请在此文件统一扩展公共构建规则。
 function(configure_maya_mll TARGET_NAME)
     target_include_directories(${TARGET_NAME}
         PRIVATE
@@ -33,6 +34,7 @@ function(configure_maya_mll TARGET_NAME)
         )
     endif()
 
+    # TODO(project-manager): 若区分内部测试版与正式版，可在这里追加 PDB、后缀名或输出目录规则。
     set_target_properties(${TARGET_NAME}
         PROPERTIES
             PREFIX ""
@@ -42,6 +44,7 @@ function(configure_maya_mll TARGET_NAME)
     )
 endfunction()
 
+# TODO(developer): 新增源文件后请加入 TARGET_SOURCES，并保持目录与过滤器分组一致。
 function(apply_default_source_groups TARGET_NAME)
     foreach(_file IN LISTS ARGN)
         get_filename_component(_absolute_path "${_file}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
