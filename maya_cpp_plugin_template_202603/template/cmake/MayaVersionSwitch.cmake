@@ -1,3 +1,4 @@
+# TODO(project-manager): 如需支持更多 Maya 版本，请在此文件中追加版本与环境变量的映射规则。
 function(resolve_maya_location MAYA_VERSION_INPUT)
     set(_maya_location "")
 
@@ -9,6 +10,7 @@ function(resolve_maya_location MAYA_VERSION_INPUT)
         set(_maya_location "$ENV{MAYA_LOCATION_2026}")
     endif()
 
+    # TODO(project-manager): 如果团队仅维护单一版本 Maya，可只保留 MAYA_LOCATION 并删除版本分支。
     if(_maya_location STREQUAL "")
         set(_maya_location "$ENV{MAYA_LOCATION}")
     endif()
