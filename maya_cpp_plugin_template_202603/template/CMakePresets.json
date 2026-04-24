@@ -1,5 +1,9 @@
 {
   "version": 3,
+  "$comment": [
+    "TODO(project-manager): 团队新增 Maya 版本时，请同步补充 configurePresets 与 buildPresets。",
+    "TODO(project-manager): 如需 CI，请保持 preset 名称长期稳定，避免脚本频繁改动。"
+  ],
   "configurePresets": [
     {
       "name": "vs2022-maya2024",
